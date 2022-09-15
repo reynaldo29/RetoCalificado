@@ -1,4 +1,5 @@
 // This is your Prisma schema file,
+// your_password
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
@@ -6,7 +7,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -29,8 +30,31 @@ model Character {
   image      String?
   weight     Float?
   history    String?
+  pelicula   Movie @relation(fields:[peliculaId],references: [id])
+  peliculaId Int
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
 
   @@map("characters")
+}
+
+model Movie {
+  id Int @id @default(autoincrement())
+  image String?
+  tittle String
+  character Character[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("movies")
+}
+
+model Gender {
+  id Int @id @default(autoincrement())
+  name String
+  image String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("genders")
 }
