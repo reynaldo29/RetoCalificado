@@ -26,7 +26,7 @@ model User {
 model Character {
   id         Int       @id @default(autoincrement())
   name       String
-  date_birth DateTime?
+  date_birth DateTime
   image      String?
   weight     Float?
   history    String?
@@ -42,6 +42,7 @@ model Movie {
   id Int @id @default(autoincrement())
   image String?
   tittle String
+  calification Int?
   character Character[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

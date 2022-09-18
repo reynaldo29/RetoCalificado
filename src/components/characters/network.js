@@ -8,5 +8,5 @@ characterRouter.route("/").post(Controller.create);
 characterRouter.route("/update/:id").put(Controller.update);
 characterRouter.route("/delete/:id").delete(Controller.remove);
 characterRouter.route("/detail/:id").get(Controller.detail);
-
+characterRouter.route("/name/:nombre").get(Controller.findMovieName);
 export default characterRouter;

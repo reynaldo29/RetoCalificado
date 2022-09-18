@@ -3,20 +3,56 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const findAll = async (req, res) =>{
-    try{
-        const characters = await prisma.character.findMany({
-            select:{      
-                name:true,
-                image:true}
-        })
-        res.json({
-            ok: true,
-            data:characters
-        });
-    }catch(error){
-        res.json({
-        });
-    }
+        const query =req.query
+        const peliculaId=req.query.peliculaId
+        console.log(Object.keys(query).length)
+
+        if(Object.keys(query).length===0){
+            const characters = await prisma.character.findMany({
+                select:{
+                    id:true,      
+                    name:true,
+                    image:true}
+            })
+            res.json({
+                ok: true,
+                data:characters
+            });
+        }else if(peliculaId){
+            const characters = await prisma.character.findMany({
+                where:{
+                    peliculaId:Number(peliculaId)
+                },
+
+                select:{
+                    id:true,
+                    name:true,
+                    image:true
+                }
+            })
+            res.json({
+                ok:true,
+                data:characters
+            })
+        }
+        else{
+            const characters = await prisma.character.findMany({
+                where:{
+                    OR:[
+                    {name:req.query.name},
+                    {image:req.query.image},
+                    ],
+                },
+                select:{
+                    id:true,      
+                    name:true,
+                    image:true},
+            })
+            res.json({
+                ok: true,
+                data:characters
+            });
+        }
 };
 
 export const create = async(req,res) => {
@@ -92,15 +128,22 @@ export const detail = async(req,res) => {
                         tittle:true
                     }
                 }
-            }
-                
-            
+            }  
         })
         res.json({
             ok:true,
             data:detailCharacter
         })
+    }catch(error){
+        res.json({
+            ok:false,
+            data:error.message
+        })
+    }
+}
 
+export const findMovieName = async(req,res) => {
+    try{
 
     }catch(error){
         res.json({
