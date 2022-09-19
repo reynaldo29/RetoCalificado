@@ -4,8 +4,7 @@ const prisma = new PrismaClient();
 
 export const findAll = async (req, res) =>{
         const query =req.query
-        const peliculaId=req.query.peliculaId
-        console.log(Object.keys(query).length)
+        const { movies,image,name,/* age  */}=req.query
 
         if(Object.keys(query).length===0){
             const characters = await prisma.character.findMany({
@@ -18,10 +17,10 @@ export const findAll = async (req, res) =>{
                 ok: true,
                 data:characters
             });
-        }else if(peliculaId){
+        }else if(movies){
             const characters = await prisma.character.findMany({
                 where:{
-                    peliculaId:Number(peliculaId)
+                    peliculaId:Number(movies)
                 },
 
                 select:{
@@ -34,13 +33,33 @@ export const findAll = async (req, res) =>{
                 ok:true,
                 data:characters
             })
-        }
-        else{
+        }/* else if(age){
+            const fechaActual = new Date();
+            const fechaNacimiento = fechaActual.getFullYear()-Number(age);
+            const año = fechaNacimiento.toString()
+            const mes=fechaActual.getMonth().toString()
+            const dia=fechaActual.getDay().toString()
+
+            const stri = año+"-"+mes+"-"+dia+'T00:00:00.000Z'
+            const fecha = await prisma.character.findMany({
+                where: {
+                    date_birth:stri
+                },
+                select:{
+                    name:true,
+                    
+                }
+            })
+            res.json({
+                ok:true,
+                data:fecha
+            }) 
+        }*/else{
             const characters = await prisma.character.findMany({
                 where:{
                     OR:[
-                    {name:req.query.name},
-                    {image:req.query.image},
+                    {name:name},
+                    {image:image},
                     ],
                 },
                 select:{
@@ -142,13 +161,3 @@ export const detail = async(req,res) => {
     }
 }
 
-export const findMovieName = async(req,res) => {
-    try{
-
-    }catch(error){
-        res.json({
-            ok:false,
-            data:error.message
-        })
-    }
-}

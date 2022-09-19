@@ -26,7 +26,7 @@ model User {
 model Character {
   id         Int       @id @default(autoincrement())
   name       String
-  date_birth DateTime
+  date_birth DateTime?
   image      String?
   weight     Float?
   history    String?
@@ -43,6 +43,9 @@ model Movie {
   image String?
   tittle String
   calification Int?
+  fecha_creacion DateTime?
+  genero Gender @relation(fields: [genderId],references: [id])
+  genderId Int
   character Character[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -54,6 +57,7 @@ model Gender {
   id Int @id @default(autoincrement())
   name String
   image String?
+  movie   Movie[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
