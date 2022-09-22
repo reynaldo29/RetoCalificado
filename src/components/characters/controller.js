@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 export const findAll = async (req, res) =>{
         const query =req.query
-        const { movies,image,name,/* age  */}=req.query
+        const { movies,image,name,age}=req.query
 
         if(Object.keys(query).length===0){
             const characters = await prisma.character.findMany({
@@ -33,28 +33,41 @@ export const findAll = async (req, res) =>{
                 ok:true,
                 data:characters
             })
-        }/* else if(age){
-            const fechaActual = new Date();
-            const fechaNacimiento = fechaActual.getFullYear()-Number(age);
-            const año = fechaNacimiento.toString()
-            const mes=fechaActual.getMonth().toString()
-            const dia=fechaActual.getDay().toString()
+        } else if(age){
+            const actualDate= new Date();
+            const yearBirth = actualDate.getFullYear()-Number(age);
+            const birth = new Date(yearBirth)
+            birth.setFullYear(yearBirth)
+            birth.setDate(31)
+            birth.setMonth(10)
+            
+            const birth2 =new Date(birth)
+            birth.setDate(0)
+            birth.setMonth(0)
+            birth2.setHours(42)
+            birth2.setMinutes(59)
+            birth2.setSeconds(59)
 
-            const stri = año+"-"+mes+"-"+dia+'T00:00:00.000Z'
             const fecha = await prisma.character.findMany({
                 where: {
-                    date_birth:stri
+                    date_birth:{
+                       gte:birth,
+                        lte:birth2
+                    }
                 },
                 select:{
                     name:true,
+                    date_birth:true
                     
                 }
             })
+            console.log(birth)
+            console.log(birth2)
             res.json({
                 ok:true,
                 data:fecha
             }) 
-        }*/else{
+        }else{
             const characters = await prisma.character.findMany({
                 where:{
                     OR:[

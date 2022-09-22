@@ -41,3 +41,45 @@ export const create = async(req,res) => {
 
     }
 }
+
+export const update = async(req,res) => {
+    try{
+        const genderId= Number(req.params.id);
+        const {name,image} = req.body;
+        const character = await prisma.gender.update({
+            where:{
+                id:genderId
+            },
+            data:{
+                name,image
+            }
+        })
+        res.json(character)
+    }catch(error){
+        res.json({
+            ok:false,
+            data:error.message
+        });
+    }
+}
+
+export const remove = async(req,res) => {
+    try{
+        const { id } = req.params;
+        const deleteGender = await prisma.gender.delete({
+            where:{
+                id:Number(id)
+            }
+        })
+        res.json({
+            ok:true,
+            data:"genero eliminado"
+        })
+
+    }catch(error){
+        res.json({
+            ok:false,
+            data:error.message
+        });
+    }
+}

@@ -1,12 +1,12 @@
 import { Router } from "express";
 import * as Controller from "./controller";
-
+import { auth } from '../middlewares/auths.js'
 const characterRouter = Router();
 
-characterRouter.route("/").get(Controller.findAll);
-characterRouter.route("/").post(Controller.create);
-characterRouter.route("/update/:id").put(Controller.update);
-characterRouter.route("/delete/:id").delete(Controller.remove);
-characterRouter.route("/detail/:id").get(Controller.detail);
+characterRouter.route("/").get(auth,Controller.findAll);
+characterRouter.route("/").post(auth,Controller.create);
+characterRouter.route("/update/:id").put(auth,Controller.update);
+characterRouter.route("/delete/:id").delete(auth,Controller.remove);
+characterRouter.route("/detail/:id").get(auth,Controller.detail);
 
 export default characterRouter;
